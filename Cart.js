@@ -53,21 +53,22 @@ cart.get("/", (req,res) => {
         rtnItems = cartItems.filter((rtnItem)=>{
             return rtnItem.product.includes(prefix);
         });
-    }
+    };
 
 
     // iii. pageSize - if specified, only includes up to the given number of items in the response array. For example, if there are ten items total, but pageSize=5, only return an array of the first five items.
-    //https://www.youtube.com/watch/pKd0Rpw7O48
-    //slice after index 4
+    const pageSize = req.query.pageSize;
+    if (pageSize){
+        rtnItems = cartItems.slice(0, parseInt(pageSize));
+    };
 
-    
     res.status(200);
     res.json(rtnItems);
 
 });
 
 cart.get("/:id", (req,res) =>{
-    const id = req.query.id;
+    const id = req.params.id;
     if(id){
         //filter by id
         const item = cartItems.filter((item)=>{
@@ -94,13 +95,13 @@ cart.post("/", (req, res) => {
   });
 
 
-//CHECK THE LAST TWO
+
 cart.put("/:id", (req, res) => {
-    //make string into integer
-    const id = parseInt(req.params.id);
     //go through all items and find the id that we passed in
-    const index = cartItems.findIndex((i)=> i.id === id);
-        //I DONT NEED THIS RIGHT? const item = cartItems[index];
+    const index = cartItems.findIndex((i)=> i.id === parseInt(req.params.id));
+    items[index].product = req.body.distance,
+    items[index].price = req.body.price,
+    items[index].quantity = req.body.quantity
     //Logic to update item
     cartItems.splice(index, 1, req.body)
     res.status(200);
@@ -115,7 +116,6 @@ cart.delete("/:id", (req, res) => {
     const index = cartItems.findIndex((i)=> i.id === id);
     //Logic to remove item
     cartItems.splice(index, 1);
-    res.json("Removing from cart..");
     res.status(204);
     res.json(cartItems);
   });
