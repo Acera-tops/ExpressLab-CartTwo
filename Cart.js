@@ -10,8 +10,8 @@ const cartItems = [
     },
     {
     id:2,
-    product:"100 Candles",
-    price:29.99,
+    product:"50 Candles",
+    price:10.99,
     quantity:1
     },
     {
